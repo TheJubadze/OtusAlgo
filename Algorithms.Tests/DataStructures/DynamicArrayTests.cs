@@ -5,7 +5,7 @@ namespace Algorithms.Tests.DataStructures;
 public class DynamicArrayTests {
     [Fact]
     public void Indexer_Get_OutOfRange_Throws() {
-        var arr = new DynamicArray<int>(n: 2);
+        var arr = new DynamicArray<int>(2);
         Assert.Throws<ArgumentOutOfRangeException>(() => {
             var _ = arr[0];
         });
@@ -16,13 +16,13 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Add_Then_Indexer_Get_Returns_Same_Values() {
-        var arr = new DynamicArray<int>(n: 2);
+        var arr = new DynamicArray<int>(2);
         const int N = 100;
 
-        for (int i = 0; i < N; i++)
+        for (var i = 0; i < N; i++)
             arr.Add(i);
 
-        for (int i = 0; i < N; i++)
+        for (var i = 0; i < N; i++)
             Assert.Equal(i, arr[i]);
 
         Assert.Throws<ArgumentOutOfRangeException>(() => {
@@ -32,7 +32,7 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Indexer_Set_Overwrites_Value() {
-        var arr = new DynamicArray<string>(n: 1);
+        var arr = new DynamicArray<string>(1);
         arr.Add("a");
         arr.Add("b");
 
@@ -43,8 +43,8 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Capacity_Grows_When_Full_Adding_Many_Items_Does_Not_Throw() {
-        var arr = new DynamicArray<int>(n: 1);
-        for (int i = 0; i < 10_000; i++)
+        var arr = new DynamicArray<int>(1);
+        for (var i = 0; i < 10_000; i++)
             arr.Add(i);
 
         Assert.Equal(0, arr[0]);
@@ -56,7 +56,7 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Remove_Middle_Shifts_Left_And_Shortens_Length() {
-        var arr = new DynamicArray<int>(n: 4);
+        var arr = new DynamicArray<int>();
         arr.Add(10);
         arr.Add(20);
         arr.Add(30);
@@ -74,7 +74,7 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Remove_First_Shifts_All_Left() {
-        var arr = new DynamicArray<int>(n: 4);
+        var arr = new DynamicArray<int>();
         arr.Add(1);
         arr.Add(2);
         arr.Add(3);
@@ -90,7 +90,7 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Remove_Last_Just_Shortens_Length() {
-        var arr = new DynamicArray<int>(n: 4);
+        var arr = new DynamicArray<int>();
         arr.Add(1);
         arr.Add(2);
         arr.Add(3);
@@ -106,7 +106,7 @@ public class DynamicArrayTests {
 
     [Fact]
     public void Remove_OutOfRange_Throws() {
-        var arr = new DynamicArray<int>(n: 3);
+        var arr = new DynamicArray<int>(3);
         arr.Add(1);
         arr.Add(2);
 

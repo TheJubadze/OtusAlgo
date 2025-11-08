@@ -1,36 +1,48 @@
 ﻿namespace Algorithms.DataStructures;
 
-public class DynamicArray<T>(int n = 42) {
+public class DynamicArray<T>(int capacity = 4) {
     private int _insertIndex;
-    private T[] _array = new T[n];
+    private T[] _array = new T[Math.Max(0, capacity)];
 
-    public void Add(T n) {
-        if (_array.Length == _insertIndex) {
-            var newArray = new T[_array.Length * 2];
-            Array.Copy(_array, 0, newArray, 0, _array.Length);
-            _array = newArray;
-        }
+    public int Count => _insertIndex;
 
-        _array[_insertIndex] = n;
-        _insertIndex++;
+    public void Add(T item) {
+        EnsureCapacity(_insertIndex + 1);
+        _array[_insertIndex++] = item;
     }
 
     public void Remove(int index) {
-        if (index < 0 || _insertIndex <= index) throw new ArgumentOutOfRangeException(nameof(index));
+        if ((uint)index >= (uint)_insertIndex)
+            throw new ArgumentOutOfRangeException(nameof(index));
 
-        for (int i = index; i < _insertIndex; i++) {
-            _array[i] = _array[i + 1];
-        }
+        var move = _insertIndex - index - 1;
+        if (move > 0)
+            Array.Copy(_array, index + 1, _array, index, move);
 
-        _insertIndex--;
+        _array[--_insertIndex] = default!;
     }
 
     public T this[int index] {
         get => (uint)index >= (uint)_insertIndex ? throw new ArgumentOutOfRangeException(nameof(index)) : _array[index];
         set {
-            if ((uint)index >= (uint)_insertIndex)
-                throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)_insertIndex) throw new ArgumentOutOfRangeException(nameof(index));
             _array[index] = value;
         }
+    }
+
+    public void Clear() {
+        _insertIndex = 0;
+    }
+
+    private void EnsureCapacity(int min) {
+        if (_array.Length >= min) return;
+
+        var newCapacity = _array.Length == 0 ? 4 : _array.Length * 2;
+        if (newCapacity < min) newCapacity = min;
+
+        const int maxArrayLength = 0x7FFFFFC7;
+        if (newCapacity > maxArrayLength) newCapacity = Math.Max(min, maxArrayLength);
+
+        Array.Resize(ref _array, newCapacity);
     }
 }
